@@ -1,34 +1,23 @@
 pipeline {
+    agent any
+    
+    stages {
+        stage('Pull Code') {
+            steps {
+                git 'https://github.com/user/projet.git'
+            }
+        }
 
- agent any
+        stage('Build') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
 
- tools {jdk 'JAVA_HOME’, maven 'M2_HOME'}
-
- stages {
-
- stage('GIT') {
-
-           steps {
-
-               git branch: 'master',
-
-               url: ' https://github.com/hwafa/timesheetproject.git'
-
-          }
-
-     }
-
- stage ('Compile Stage') {
-
- steps {
-
- sh 'mvn clean compile'
-
- }
-
- }
-
- }
-
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+    }
 }
-
