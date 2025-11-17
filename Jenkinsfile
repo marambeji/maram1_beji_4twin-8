@@ -1,22 +1,23 @@
 pipeline {
     agent any
-    
+
+    tools {
+        jdk 'JAVA_HOME'
+        maven 'M2_HOME'
+    }
+
     stages {
+
         stage('Pull Code') {
             steps {
-                git 'https://github.com/user/projet.git'
+                git branch: 'main',
+                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git'
             }
         }
 
-        stage('Build') {
+        stage('Compile Stage') {
             steps {
-                sh 'mvn compile'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
+                sh 'mvn clean compile'
             }
         }
     }
