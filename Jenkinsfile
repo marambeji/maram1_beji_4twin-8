@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    /* 
+     * Déclenchement automatique :
+     * pollSCM('* * * * *') = vérification toutes les minutes
+     */
     triggers {
         pollSCM('* * * * *')
     }
