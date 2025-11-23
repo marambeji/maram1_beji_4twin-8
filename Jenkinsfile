@@ -1,12 +1,8 @@
 pipeline {
     agent any
 
-    /* 
-     * Déclenchement automatique :
-     * pollSCM('* * * * *') = vérification toutes les minutes
-     */
     triggers {
-        pollSCM('* * * * *')
+        pollSCM('* * * * *')  // Vérifie le repo chaque 1 minute
     }
 
     tools {
