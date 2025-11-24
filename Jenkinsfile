@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('* * * * *')   // Vérifie GitHub toutes les minutes
+    }
+
     environment {
         IMAGE = "marambeji/student-management"
         TAG = "1.0.0"
@@ -43,13 +47,3 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
-        }
-        failure {
-            echo '❌ FAILURE : Something went wrong.'
-        }
-    }
-}
