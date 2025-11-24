@@ -11,7 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/salim127/salim_hizi_4twin8.git'
+                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git'
             }
         }
 
@@ -44,10 +44,10 @@ pipeline {
 
     post {
         success {
-            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
+            echo ' SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
         }
         failure {
-            echo '❌ FAILURE : Something went wrong.'
+            echo ' FAILURE : Something went wrong.'
         }
     }
 }
