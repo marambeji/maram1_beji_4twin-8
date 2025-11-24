@@ -1,46 +1,53 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
-    }
-
-    triggers {
-        pollSCM('* * * * *')
+    environment {
+        IMAGE = "marambeji/student-management"
+        TAG = "1.0.0"
     }
 
     stages {
 
-        stage('Pull Code') {
+        stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git'
+                    url: 'https://github.com/salim127/salim_hizi_4twin8.git'
             }
         }
 
-        stage('Build JAR') {
+        stage('Build Maven Project') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh "mvn clean package -DskipTests"
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("maram1/student-management:latest")
+                sh "docker build -t ${IMAGE}:${TAG} ."
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-maram', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh "echo $PASS | docker login -u $USER --password-stdin"
                 }
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                        dockerImage.push()
-                    }
-                }
+                sh "docker push ${IMAGE}:${TAG}"
             }
+        }
+    }
+
+    post {
+        success {
+            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
+        }
+        failure {
+            echo '❌ FAILURE : Something went wrong.'
         }
     }
 }
