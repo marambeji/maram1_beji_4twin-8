@@ -11,7 +11,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git'
+                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git',
+                    credentialsId: 'github-token'
             }
         }
 
@@ -44,10 +45,10 @@ pipeline {
 
     post {
         success {
-            echo ' SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
+            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji/student-management:1.0.0) !'
         }
         failure {
-            echo ' FAILURE : Something went wrong.'
+            echo '❌ FAILURE : Something went wrong.'
         }
     }
 }
