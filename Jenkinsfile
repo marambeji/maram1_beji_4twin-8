@@ -101,7 +101,7 @@ pipeline {
 
     failure {
 
-      echo '❌ FAILURE : Something went wrong.'
+      echo 'FAILURE : Something went wrong.'
 
     }
 
