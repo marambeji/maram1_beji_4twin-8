@@ -11,8 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git',
-                    credentialsId: 'github-token'
+                    url: 'https://github.com/marambeji/maram1_beji_4twin-8.git'
             }
         }
 
@@ -31,7 +30,9 @@ pipeline {
         stage('Docker Login') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-maram', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
+                    sh """
+                        echo "$PASS" | docker login -u "$USER" --password-stdin
+                    """
                 }
             }
         }
@@ -45,7 +46,7 @@ pipeline {
 
     post {
         success {
-            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji/student-management:1.0.0) !'
+            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
         }
         failure {
             echo '❌ FAILURE : Something went wrong.'
