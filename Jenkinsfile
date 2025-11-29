@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        jdk 'jdk17'
+        maven 'M2_HOME'
+    }
+
     triggers {
         githubPush()
     }
@@ -8,12 +13,9 @@ pipeline {
     environment {
         IMAGE = "marambeji/student-management"
         TAG = "1.0.0"
+        SONAR_HOST = "http://192.168.10.132:9000"
+        SONAR_TOKEN = "squ_c35356c3e293949b2f425b7228a89063d6dba189"
     }
-
-  tools {
-    jdk 'jdk17'
-    maven 'M2_HOME'
-}
 
     stages {
 
@@ -30,20 +32,21 @@ pipeline {
             }
         }
 
-        stage('MVN SONARQUBE') {
+        stage('SonarQube Analysis') {
             steps {
-                sh 'mvn sonar:sonar \
-                    -Dsonar.projectKey=mon-projet \
-                    -Dsonar.host.url=http://192.168.10.132:9000 \
-                    -Dsonar.login=admin \
-                    -Dsonar.password=sonar'
+                sh """
+                    mvn sonar:sonar \
+                        -Dsonar.projectKey=student-management \
+                        -Dsonar.host.url=${SONAR_HOST} \
+                        -Dsonar.token=${SONAR_TOKEN}
+                """
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 sh """
-                    echo "⚙️ Building Docker image WITHOUT BuildKit..."
+                    echo "⚙️ Building Docker image..."
                     export DOCKER_BUILDKIT=0
                     docker build -t ${IMAGE}:${TAG} .
                 """
@@ -75,7 +78,7 @@ pipeline {
 
     post {
         success {
-            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub (marambeji) !'
+            echo '🎉 SUCCESS : Docker image built & pushed successfully on DockerHub + SonarQube OK !'
         }
         failure {
             echo '❌ FAILURE : Something went wrong.'
