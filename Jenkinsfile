@@ -10,10 +10,10 @@ pipeline {
         TAG = "1.0.0"
     }
 
-    tools {
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
-    }
+  tools {
+    jdk 'jdk17'
+    maven 'M2_HOME'
+}
 
     stages {
 
