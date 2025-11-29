@@ -10,6 +10,11 @@ pipeline {
         TAG = "1.0.0"
     }
 
+    tools {
+        jdk 'JAVA_HOME'
+        maven 'M2_HOME'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -22,6 +27,16 @@ pipeline {
         stage('Build Maven Project') {
             steps {
                 sh "mvn clean package -DskipTests"
+            }
+        }
+
+        stage('MVN SONARQUBE') {
+            steps {
+                sh 'mvn sonar:sonar \
+                    -Dsonar.projectKey=mon-projet \
+                    -Dsonar.host.url=http://192.168.10.132:9000 \
+                    -Dsonar.login=admin \
+                    -Dsonar.password=sonar'
             }
         }
 
