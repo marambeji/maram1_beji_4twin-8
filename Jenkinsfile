@@ -10,6 +10,8 @@ pipeline {
         githubPush()
     }
 
+
+    
     environment {
         IMAGE = "marambeji/student-management"
         TAG = "1.0.0"
